@@ -2,6 +2,8 @@ package com.example.timetracker.ui.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -13,13 +15,9 @@ import com.example.timetracker.viewmodel.TimerVM
 @Composable
 fun MainScreen() {
     val context = LocalContext.current
-
-
     val db = remember {ActivityDatabase.getDatabase(context)}
     val repository = remember { ActivityRepository(db.activityDao())}
-
     val timerVM =TimerVM(repository)
 
     TimerScreen(timer = timerVM)
-
 }

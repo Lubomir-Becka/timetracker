@@ -22,9 +22,14 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
     var duration by mutableStateOf(0L)
     var start by mutableStateOf(Instant.EPOCH)
     var isRunning by mutableStateOf(false)
+    var nameError by mutableStateOf<String?>(null)
+
 
     fun updateName(newName: String) {
         name = newName
+        if (nameError != null && newName.isNotBlank()) {
+            nameError = null // clear error when user starts typing
+        }
     }
 
     fun start() {
@@ -41,10 +46,10 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
     }
 
     fun stop() {
+        timerJob?.cancel()
         if (name.isNotBlank() && isRunning) {
             duration = Instant.now().epochSecond - start.epochSecond
             isRunning = false
-            timerJob?.cancel()
             val activity = ActivityEntry(
                 name = name,
                 duration = duration,
@@ -53,6 +58,8 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
             viewModelScope.launch {
                 repository.insert(activity)
             }
+        } else {
+            nameError = "Vyplnte názov aktivity!"
         }
     }
 
@@ -61,5 +68,11 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
         duration = 0L
         start = Instant.EPOCH
         timerJob?.cancel()
+    }
+    fun formatTime(seconds: Long): String {
+        val _hours = seconds / 3600;
+        val _minutes = (seconds % 3600) / 60
+        val _seconds = seconds % 60
+        return "%02d:%02d:%02d".format(_hours , _minutes, _seconds)
     }
 }
