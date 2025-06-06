@@ -21,7 +21,7 @@ class ActivityRepository(private val activityDao: ActivityDao){
         activityDao.getAll();
     }
 
-    suspend fun getActivitiesBetween(from: Instant, to: Instant){
+    suspend fun getActivitiesBetween(from: Instant, to: Instant) : List<ActivityEntry>{
         activityDao.getActivitesBetween(from = from, to = to)
     }
 }
