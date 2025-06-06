@@ -4,7 +4,7 @@ import com.example.timetracker.data.ActivityDao
 import com.example.timetracker.data.ActivityEntry
 
 
-class Repository(private val activityDao: ActivityDao){
+class ActivityRepository(private val activityDao: ActivityDao){
     suspend fun insert(activity: ActivityEntry) {
         activityDao.insert(activity)
     }
