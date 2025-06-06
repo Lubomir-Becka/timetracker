@@ -8,8 +8,6 @@ import kotlinx.coroutines.launch
 
 
 class TimerVM(private val repository: ActivityRepository) : ViewModel(){
-
-
     var name: String = ""
     var start: Long = 0L
     var duration: Long = 0L
