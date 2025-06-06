@@ -19,7 +19,7 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
     var start: Instant = Instant.EPOCH
     var isRunning: Boolean = false
 
-    fun setName(newName: String) {
+    fun updateName(newName: String) {
         name = newName
     }
 

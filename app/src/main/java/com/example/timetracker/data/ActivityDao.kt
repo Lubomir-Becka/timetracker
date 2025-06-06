@@ -22,6 +22,6 @@ interface ActivityDao {
     suspend fun getAll(): List<ActivityEntry>
 
     @Query("select * from activities where start between :from and :to order by start desc")
-    suspend fun getActivitesBetween(from: Instant, to: Instant)
+    suspend fun getActivitesBetween(from: Instant, to: Instant): List<ActivityEntry>
 
 }

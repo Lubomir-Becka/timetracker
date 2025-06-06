@@ -17,11 +17,11 @@ class ActivityRepository(private val activityDao: ActivityDao){
     suspend fun deleteActivity(activity: ActivityEntry) {
         activityDao.delete(activity)
     }
-    suspend fun getAll(){
-        activityDao.getAll();
+    suspend fun getAll():  List<ActivityEntry>{
+        return activityDao.getAll();
     }
 
-    suspend fun getActivitiesBetween(from: Instant, to: Instant) : List<ActivityEntry>{
-        activityDao.getActivitesBetween(from = from, to = to)
+    suspend fun getActivitiesBetween(from: Instant, to: Instant): List<ActivityEntry>{
+        return activityDao.getActivitesBetween(from = from, to = to)
     }
 }
