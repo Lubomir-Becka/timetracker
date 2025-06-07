@@ -18,6 +18,7 @@ import java.time.ZoneId
 
 
 private var timerJob: Job? = null
+
 @RequiresApi(Build.VERSION_CODES.O)
 class TimerVM(private val repository: ActivityRepository) : ViewModel(){
 
