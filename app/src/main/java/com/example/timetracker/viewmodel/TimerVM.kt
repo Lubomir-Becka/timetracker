@@ -13,6 +13,9 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import java.time.LocalDate
+import java.time.ZoneId
+
 
 private var timerJob: Job? = null
 @RequiresApi(Build.VERSION_CODES.O)
@@ -28,7 +31,7 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
     fun updateName(newName: String) {
         name = newName
         if (nameError != null && newName.isNotBlank()) {
-            nameError = null // clear error when user starts typing
+            nameError = null
         }
     }
 
@@ -69,10 +72,37 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
         start = Instant.EPOCH
         timerJob?.cancel()
     }
-    fun formatTime(seconds: Long): String {
-        val _hours = seconds / 3600;
-        val _minutes = (seconds % 3600) / 60
-        val _seconds = seconds % 60
-        return "%02d:%02d:%02d".format(_hours , _minutes, _seconds)
+
+    fun insertSampleData() {
+        viewModelScope.launch {
+            repository.insert(
+                ActivityEntry(
+                    name = "Sample Activity",
+                    start = Instant.now(),
+                    duration = 1600
+                )
+            )
+            repository.insert(
+                ActivityEntry(
+                    name = "Sample Activity 1",
+                    start = Instant.now().plusSeconds(3600),
+                    duration = 3600
+                )
+            )
+            repository.insert(
+                ActivityEntry(
+                    name = "Sample Activity 2",
+                    start = Instant.now().minusSeconds(3800),
+                    duration = 3660
+                )
+            )
+            repository.insert(
+                ActivityEntry(
+                    name = "Sample Activity 3",
+                    start = LocalDate.now().minusDays(1).atTime(23, 30).atZone(ZoneId.systemDefault()).toInstant(),
+                    duration = 3660
+                )
+            )
+        }
     }
 }
