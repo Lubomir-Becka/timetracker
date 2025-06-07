@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.timetracker.utils.FormatTime
 
 
 import com.example.timetracker.viewmodel.TimerVM
@@ -85,7 +86,7 @@ fun TimerScreen(timer: TimerVM) {
                 .shadow(8.dp, RoundedCornerShape(32.dp))
         ) {
             Text(
-                text = timer.formatTime(timer.duration),
+                text = FormatTime(timer.duration),
                 fontSize = 56.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -140,6 +141,9 @@ fun TimerScreen(timer: TimerVM) {
                     tint = Color.White
                 )
             }
+        }
+        Button( onClick = {timer.insertSampleData()}) {
+            Text(text = "Sample data")
         }
     }
 }
