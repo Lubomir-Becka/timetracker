@@ -3,6 +3,7 @@ package com.example.timetracker.viewmodel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -23,7 +24,7 @@ private var timerJob: Job? = null
 class TimerVM(private val repository: ActivityRepository) : ViewModel(){
 
     var name by mutableStateOf("")
-    var duration by mutableStateOf(0L)
+    var duration by mutableLongStateOf(0L)
     var start by mutableStateOf(Instant.EPOCH)
     var isRunning by mutableStateOf(false)
     var nameError by mutableStateOf<String?>(null)
@@ -37,7 +38,7 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
     }
 
     fun start() {
-        if (!isRunning) {
+        if (!isRunning && name.isNotBlank()) {
             start = Instant.now()
             isRunning = true
             timerJob = viewModelScope.launch {
@@ -46,25 +47,23 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
                     delay(1000)
                 }
             }
+        } else {
+            nameError = "Vyplnte názov aktivity!"
         }
     }
 
     fun stop() {
-        timerJob?.cancel()
-        if (name.isNotBlank() && isRunning) {
-            duration = Instant.now().epochSecond - start.epochSecond
-            isRunning = false
-            val activity = ActivityEntry(
-                name = name,
-                duration = duration,
-                start = start
-            )
-            viewModelScope.launch {
-                repository.insert(activity)
-            }
-        } else {
-            nameError = "Vyplnte názov aktivity!"
+        duration = Instant.now().epochSecond - start.epochSecond
+        val activity = ActivityEntry(
+            name = name,
+            duration = duration,
+            start = start
+        )
+        viewModelScope.launch {
+            repository.insert(activity)
         }
+        reset()
+
     }
 
     fun reset() {

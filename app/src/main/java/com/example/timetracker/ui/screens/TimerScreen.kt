@@ -28,21 +28,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+
 import androidx.compose.ui.unit.sp
-import com.example.timetracker.utils.FormatTime
+import com.example.timetracker.utils.FormatSecToHMS
 
 
 import com.example.timetracker.viewmodel.TimerVM
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-
 fun TimerScreen(timer: TimerVM) {
 
     Column(modifier = Modifier
@@ -86,7 +85,7 @@ fun TimerScreen(timer: TimerVM) {
                 .shadow(8.dp, RoundedCornerShape(32.dp))
         ) {
             Text(
-                text = FormatTime(timer.duration),
+                text = FormatSecToHMS(timer.duration),
                 fontSize = 56.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -108,7 +107,7 @@ fun TimerScreen(timer: TimerVM) {
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (timer.isRunning)
-                        MaterialTheme.colorScheme.error
+                        Color(0xFF4CAF50)
                     else
                         Color(0xFF7C3AED)
                 ),
