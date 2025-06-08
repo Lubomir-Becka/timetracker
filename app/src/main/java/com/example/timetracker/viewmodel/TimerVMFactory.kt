@@ -10,6 +10,7 @@ import com.example.timetracker.repositories.ActivityRepository
  *
  * @property repository The repository used by the TimerVM.
  */
+//Inspiration from https://medium.com/@dilip2882/why-use-viewmodel-factory-understanding-parameterized-viewmodels-2dbfcf92a11d
 class TimerVMFactory (
     private val repository: ActivityRepository
 ) : ViewModelProvider.Factory {

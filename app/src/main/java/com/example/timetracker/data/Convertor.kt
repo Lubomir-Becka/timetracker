@@ -14,6 +14,7 @@ class Convertor {
      * @param value The string representation of the timestamp.
      * @return The corresponding Instant.
      */
+    //inspiracia https://developer.android.com/training/data-storage/room/referencing-data#type-converters
     @RequiresApi(Build.VERSION_CODES.O)
     @TypeConverter
     fun fromTimeStamp(value: String?): Instant? =
