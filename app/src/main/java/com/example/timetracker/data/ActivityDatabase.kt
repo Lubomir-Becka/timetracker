@@ -6,7 +6,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-
+/**
+ * Room database for storing activity entries.
+ *
+ * Provides a singleton instance of the database and access to the [ActivityDao].
+ */
 @Database(entities = [ActivityEntry::class], version = 1, exportSchema = false)
 @TypeConverters(Convertor::class)
 abstract class ActivityDatabase : RoomDatabase() {

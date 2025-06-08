@@ -33,9 +33,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.sp
+import com.example.timetracker.R
 import com.example.timetracker.utils.formatSecToHMS
 
 
@@ -55,7 +57,7 @@ fun TimerScreen(timer: TimerVM) {
             OutlinedTextField(
                 value = timer.name,
                 onValueChange = { timer.updateName(it) },
-                placeholder = { Text("Názov aktivity") },
+                placeholder = { Text(stringResource(R.string.activity_name)) },
                 isError = timer.nameError != null,
                 supportingText = {
                     timer.nameError?.let { errorMsg ->
@@ -84,7 +86,6 @@ fun TimerScreen(timer: TimerVM) {
                 elevation = CardDefaults.cardElevation(16.dp),
                 modifier = Modifier
                     .padding(vertical = 8.dp)
-                    .shadow(8.dp, RoundedCornerShape(32.dp))
             ) {
                 Text(
                     text = formatSecToHMS(timer.duration),

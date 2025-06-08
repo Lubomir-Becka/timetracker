@@ -15,11 +15,19 @@ import java.time.ZoneId
 
 private var lastFrom: Instant? = null
 private var lastTo: Instant? = null
+/**
+ * ViewModel Calendar.
+ */
 class CalendarVM (private val repository: ActivityRepository) : ViewModel(){
 
     private val _activities = MutableStateFlow<List<ActivityEntry>>(emptyList())
     val activities: StateFlow<List<ActivityEntry>> = _activities
 
+    /**
+     * Loads activities for the specified time interval.
+     * @param from Start of the interval.
+     * @param to End of the interval.
+     */
     fun loadActivitiesForInterval(from: Instant, to: Instant) {
         lastFrom = from
         lastTo = to
@@ -28,6 +36,10 @@ class CalendarVM (private val repository: ActivityRepository) : ViewModel(){
         }
     }
 
+    /**
+     * Deletes the given activity from the database and reloads activities.
+     * @param activity The selected activity to delete.
+     */
     fun deleteActivity(activity: ActivityEntry) {
         viewModelScope.launch {
             repository.deleteActivity(activity)
@@ -35,13 +47,23 @@ class CalendarVM (private val repository: ActivityRepository) : ViewModel(){
         reloadLast()
     }
 
+    /**
+     * Updates the activity name and clears the error message if the name is not blank.
+     * @param newName The new name of the activity.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun updateActivity(activity: ActivityEntry, newName: String) {
-        viewModelScope.launch {
-            repository.updateActivity(activity.copy(name = newName))
+        if(newName.isNotBlank()) {
+            viewModelScope.launch {
+                repository.updateActivity(activity.copy(name = newName))
+            }
+            reloadLast()
         }
-        reloadLast()
     }
+    /**
+     * Loads activities for the entire week starting from [weekStart].
+     * @param weekStart The first day of the week.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun loadActivitiesForWeek(weekStart: LocalDate) {
         val from = weekStart.atStartOfDay(ZoneId.systemDefault()).toInstant()
@@ -49,6 +71,9 @@ class CalendarVM (private val repository: ActivityRepository) : ViewModel(){
         loadActivitiesForInterval(from = from, to = to)
     }
 
+    /**
+     * Reloads last activities.
+     */
     fun reloadLast() {
         if (lastFrom != null && lastTo != null)
                 loadActivitiesForInterval(lastFrom!!, lastTo!!)

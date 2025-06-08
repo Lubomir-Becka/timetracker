@@ -19,7 +19,9 @@ import java.time.ZoneId
 
 
 private var timerJob: Job? = null
-
+/**
+ * ViewModel for timer.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 class TimerVM(private val repository: ActivityRepository) : ViewModel(){
 
@@ -29,14 +31,20 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
     var isRunning by mutableStateOf(false)
     var nameError by mutableStateOf<String?>(null)
 
-
+    /**
+     * Updates the activity name and clears the error if the name is not blank.
+     * @param newName The new name.
+     */
     fun updateName(newName: String) {
         name = newName
         if (nameError != null && newName.isNotBlank()) {
             nameError = null
         }
     }
-
+    /**
+     * Starts timer if activity name is provided.
+     * If activity name is blank, sets an error message.
+     */
     fun start() {
         if (!isRunning && name.isNotBlank()) {
             start = Instant.now()
@@ -52,6 +60,9 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
         }
     }
 
+    /**
+     *  Stops timer and inserts activity into database.
+     */
     fun stop() {
         duration = Instant.now().epochSecond - start.epochSecond
         val activity = ActivityEntry(
@@ -65,7 +76,9 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
         reset()
 
     }
-
+    /**
+     * Resets timer.
+     */
     fun reset() {
         isRunning = false
         duration = 0L

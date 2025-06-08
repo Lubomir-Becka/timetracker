@@ -38,8 +38,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.timetracker.R
 import com.example.timetracker.data.ActivityEntry
 import com.example.timetracker.utils.formatSecToHMS
 import com.example.timetracker.viewmodel.CalendarVM
@@ -74,7 +76,7 @@ fun DailyScreen(calendarVM: CalendarVM) {
             modifier = Modifier.fillMaxWidth()
         ) {
             IconButton(onClick = { currentDate = currentDate.minusDays(1) }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Predchádzajúci deň")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.previous_day))
             }
             Text(
                 text = currentDate.format(DateTimeFormatter.ofPattern("EEEE, d. MMMM yyyy", Locale("sk"))),
@@ -85,7 +87,7 @@ fun DailyScreen(calendarVM: CalendarVM) {
             )
             if (!currentDate.isEqual(LocalDate.now()))
                 IconButton(onClick = { currentDate = currentDate.plusDays(1) }) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Nasledujúci deň")
+                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(R.string.next_day))
                 }
         }
 
@@ -149,7 +151,7 @@ fun DailyScreen(calendarVM: CalendarVM) {
                                         color = MaterialTheme.colorScheme.primary
                                     )
                                     IconButton(onClick = { calendarVM.deleteActivity(activity) }) {
-                                        Icon(Icons.Default.Delete, contentDescription = "Odstrániť")
+                                        Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete))
                                     }
                                 }
                             }
@@ -166,12 +168,12 @@ fun DailyScreen(calendarVM: CalendarVM) {
     if (editingActivity != null) {
         AlertDialog(
             onDismissRequest = { editingActivity = null },
-            title = { Text("Upraviť aktivitu") },
+            title = { Text(stringResource(R.string.update_activity)) },
             text = {
                 OutlinedTextField(
                     value = newName,
                     onValueChange = { newName = it },
-                    label = { Text("Nový názov") }
+                    label = { Text(stringResource(R.string.new_name)) }
                 )
             },
             confirmButton = {
@@ -182,11 +184,11 @@ fun DailyScreen(calendarVM: CalendarVM) {
                         }
                         editingActivity = null
                     }
-                ) { Text("Uložiť") }
+                ) { Text(stringResource(R.string.save)) }
             },
             dismissButton = {
                 OutlinedButton(onClick = { editingActivity = null }) {
-                    Text("Zrušiť")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
