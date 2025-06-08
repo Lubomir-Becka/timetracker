@@ -1,15 +1,20 @@
 package com.example.timetracker.viewmodel
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import com.example.timetracker.data.ActivityEntry
 import androidx.lifecycle.viewModelScope
 import com.example.timetracker.repositories.ActivityRepository
+import com.example.timetracker.worker.cancelNotification
+import com.example.timetracker.worker.startNotification
 import kotlinx.coroutines.launch
 import java.time.Instant
 import kotlinx.coroutines.Job
@@ -45,8 +50,9 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
      * Starts timer if activity name is provided.
      * If activity name is blank, sets an error message.
      */
-    fun start() {
+    fun start(context: Context) {
         if (!isRunning && name.isNotBlank()) {
+            onTimerStart(context, name)
             start = Instant.now()
             isRunning = true
             timerJob = viewModelScope.launch {
@@ -63,8 +69,9 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
     /**
      *  Stops timer and inserts activity into database.
      */
-    fun stop() {
+    fun stop(context: Context) {
         duration = Instant.now().epochSecond - start.epochSecond
+        onTimerStop(context)
         val activity = ActivityEntry(
             name = name,
             duration = duration,
@@ -76,6 +83,7 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
         reset()
 
     }
+
     /**
      * Resets timer.
      */
@@ -84,6 +92,14 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
         duration = 0L
         start = Instant.EPOCH
         timerJob?.cancel()
+    }
+
+    fun onTimerStart(context: Context, activityName: String) {
+        startNotification(context, activityName)
+    }
+
+    fun onTimerStop(context: Context) {
+        cancelNotification(context)
     }
 
     fun insertSampleData() {

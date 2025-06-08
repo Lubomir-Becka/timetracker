@@ -33,6 +33,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 
@@ -46,7 +47,7 @@ import com.example.timetracker.viewmodel.TimerVM
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TimerScreen(timer: TimerVM) {
-
+    val context = LocalContext.current
     LazyColumn(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)
@@ -107,7 +108,8 @@ fun TimerScreen(timer: TimerVM) {
             ) {
                 Button(
                     onClick = {
-                        if (timer.isRunning) timer.stop() else timer.start()
+                        if (timer.isRunning) timer.stop(context) else timer.start(context)
+
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (timer.isRunning)
