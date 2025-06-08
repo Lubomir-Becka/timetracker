@@ -147,9 +147,6 @@ fun TimerScreen(timer: TimerVM) {
                     )
                 }
             }
-            Button(onClick = { timer.insertSampleData()}) {
-                Text(text = "Sample data")
-            }
         }
     }
 }

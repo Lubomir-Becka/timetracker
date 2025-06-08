@@ -102,36 +102,4 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
         cancelNotification(context)
     }
 
-    fun insertSampleData() {
-        viewModelScope.launch {
-            repository.insert(
-                ActivityEntry(
-                    name = "Sample Activity",
-                    start = Instant.now(),
-                    duration = 1600
-                )
-            )
-            repository.insert(
-                ActivityEntry(
-                    name = "Sample Activity 1",
-                    start = Instant.now().plusSeconds(3600),
-                    duration = 3600
-                )
-            )
-            repository.insert(
-                ActivityEntry(
-                    name = "Sample Activity 2",
-                    start = Instant.now().minusSeconds(3800),
-                    duration = 3660
-                )
-            )
-            repository.insert(
-                ActivityEntry(
-                    name = "Sample Activity 3",
-                    start = LocalDate.now().minusDays(1).atTime(23, 30).atZone(ZoneId.systemDefault()).toInstant(),
-                    duration = 3660
-                )
-            )
-        }
-    }
 }
