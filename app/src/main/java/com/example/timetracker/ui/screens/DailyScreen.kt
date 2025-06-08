@@ -83,9 +83,10 @@ fun DailyScreen(calendarVM: CalendarVM) {
                 modifier = Modifier.weight(1f),
                 color = MaterialTheme.colorScheme.primary
             )
-            IconButton(onClick = { currentDate = currentDate.plusDays(1) }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Nasledujúci deň")
-            }
+            if (!currentDate.isEqual(LocalDate.now()))
+                IconButton(onClick = { currentDate = currentDate.plusDays(1) }) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Nasledujúci deň")
+                }
         }
 
         Spacer(modifier = Modifier.height(20.dp))

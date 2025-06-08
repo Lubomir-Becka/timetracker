@@ -46,7 +46,7 @@ class CalendarVM (private val repository: ActivityRepository) : ViewModel(){
     fun loadActivitiesForWeek(weekStart: LocalDate) {
         val from = weekStart.atStartOfDay(ZoneId.systemDefault()).toInstant()
         val to = weekStart.plusDays(7).atStartOfDay(ZoneId.systemDefault()).toInstant()
-        loadActivitiesForInterval( from = from, to = to)
+        loadActivitiesForInterval(from = from, to = to)
     }
 
     fun reloadLast() {
