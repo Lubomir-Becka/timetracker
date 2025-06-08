@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">timetracker</string>
+    <string name="timer">Časovač</string>
+    <string name="calendar">Kalendár</string>
+    <string name="next_day">Nasledujúci deň</string>
+    <string name="next_week">Nasledujúci týždeň</string>
+    <string name="previous_day">Predchádzajúci deň</string>
+    <string name="previous_week">Predchádzajúci týždeň</string>
+    <string name="update_activity">Upraviť aktivitu</string>
+    <string name="new_name">Nový názov</string>
+    <string name="delete">Vymazať</string>
+    <string name="cancel">Zrušiť</string>
+    <string name="save">Uložiť</string>
+    <string name="activity_name">Názov aktivity</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+</resources>
