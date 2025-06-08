@@ -7,7 +7,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 
-fun FormatSecToHMS(seconds: Long): String {
+fun formatSecToHMS(seconds: Long): String {
     val _hours = seconds / 3600;
     val _minutes = (seconds % 3600) / 60
     val _seconds = seconds % 60
@@ -15,7 +15,7 @@ fun FormatSecToHMS(seconds: Long): String {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun FormatTimeToHM (instant: Instant) : String {
+fun formatTimeToHM (instant: Instant) : String {
     val localTime = instant.atZone(ZoneId.systemDefault()).toLocalTime()
     return localTime.format(DateTimeFormatter.ofPattern("HH:mm"))
 }

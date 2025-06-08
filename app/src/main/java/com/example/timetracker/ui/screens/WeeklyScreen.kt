@@ -26,8 +26,10 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import androidx.compose.runtime.getValue
-import com.example.timetracker.utils.FormatSecToHMS
-import com.example.timetracker.utils.FormatTimeToHM
+import com.example.timetracker.utils.formatSecToHMS
+import com.example.timetracker.utils.formatTimeToHM
+import java.time.format.TextStyle
+import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -58,7 +60,7 @@ fun WeeklyScreen(calendarVM: CalendarVM) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = day.dayOfWeek.name.take(3),
+                    text = day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale("sk")),
                     style = MaterialTheme.typography.titleSmall
                 )
                 Text(
@@ -87,14 +89,14 @@ fun WeeklyScreen(calendarVM: CalendarVM) {
                                 )
                                 Row() {
                                     Text(
-                                        text = FormatTimeToHM(activity.start),
+                                        text = formatTimeToHM(activity.start),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.primary,
                                         modifier = Modifier.weight(1f)
                                     )
 
                                     Text(
-                                        text = FormatSecToHMS(activity.duration),
+                                        text = formatSecToHMS(activity.duration),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.primary
                                     )

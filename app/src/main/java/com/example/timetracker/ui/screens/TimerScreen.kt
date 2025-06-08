@@ -35,7 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.sp
-import com.example.timetracker.utils.FormatSecToHMS
+import com.example.timetracker.utils.formatSecToHMS
 
 
 import com.example.timetracker.viewmodel.TimerVM
@@ -85,7 +85,7 @@ fun TimerScreen(timer: TimerVM) {
                 .shadow(8.dp, RoundedCornerShape(32.dp))
         ) {
             Text(
-                text = FormatSecToHMS(timer.duration),
+                text = formatSecToHMS(timer.duration),
                 fontSize = 56.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,

@@ -2,6 +2,7 @@ package com.example.timetracker.ui.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,12 +16,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,18 +40,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.timetracker.utils.FormatSecToHMS
+import com.example.timetracker.data.ActivityEntry
+import com.example.timetracker.utils.formatSecToHMS
 import com.example.timetracker.viewmodel.CalendarVM
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DailyScreen(calendarVM: CalendarVM) {
     var currentDate by remember { mutableStateOf(LocalDate.now()) }
-
+    var editingActivity by remember { mutableStateOf<ActivityEntry?>(null) }
+    var newName by remember { mutableStateOf("") }
 
     LaunchedEffect(currentDate) {
         val from = currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
@@ -60,7 +69,6 @@ fun DailyScreen(calendarVM: CalendarVM) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -69,7 +77,7 @@ fun DailyScreen(calendarVM: CalendarVM) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Predchádzajúci deň")
             }
             Text(
-                text = currentDate.format(DateTimeFormatter.ofPattern("EEEE, d. MMMM yyyy")),
+                text = currentDate.format(DateTimeFormatter.ofPattern("EEEE, d. MMMM yyyy", Locale("sk"))),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f),
@@ -105,6 +113,7 @@ fun DailyScreen(calendarVM: CalendarVM) {
                         color = Color.Gray,
                         style = MaterialTheme.typography.bodyMedium
                     )
+
                     Column(modifier = Modifier.weight(1f)) {
                         hourActivities.forEach { activity ->
                             Card(
@@ -127,12 +136,20 @@ fun DailyScreen(calendarVM: CalendarVM) {
                                         style = MaterialTheme.typography.bodyMedium,
                                         fontWeight = FontWeight.Bold,
                                         modifier = Modifier.weight(1f)
+                                            .clickable {
+                                                editingActivity = activity
+                                                newName = activity.name
+                                            }
                                     )
+
                                     Text(
-                                        text = FormatSecToHMS(activity.duration),
+                                        text = formatSecToHMS(activity.duration),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.primary
                                     )
+                                    IconButton(onClick = { calendarVM.deleteActivity(activity) }) {
+                                        Icon(Icons.Default.Delete, contentDescription = "Odstrániť")
+                                    }
                                 }
                             }
                         }
@@ -144,5 +161,33 @@ fun DailyScreen(calendarVM: CalendarVM) {
                     color = Color.LightGray)
             }
         }
+    }
+    if (editingActivity != null) {
+        AlertDialog(
+            onDismissRequest = { editingActivity = null },
+            title = { Text("Upraviť aktivitu") },
+            text = {
+                OutlinedTextField(
+                    value = newName,
+                    onValueChange = { newName = it },
+                    label = { Text("Nový názov") }
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        editingActivity?.let { activity ->
+                            calendarVM.updateActivity(activity, newName)
+                        }
+                        editingActivity = null
+                    }
+                ) { Text("Uložiť") }
+            },
+            dismissButton = {
+                OutlinedButton(onClick = { editingActivity = null }) {
+                    Text("Zrušiť")
+                }
+            }
+        )
     }
 }
