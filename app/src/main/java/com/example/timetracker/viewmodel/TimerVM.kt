@@ -3,12 +3,10 @@ package com.example.timetracker.viewmodel
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.ContextualFlowRow
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import com.example.timetracker.data.ActivityEntry
 import androidx.lifecycle.viewModelScope
@@ -52,8 +50,8 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
      */
     fun start(context: Context) {
         if (!isRunning && name.isNotBlank()) {
-            onTimerStart(context, name)
             start = Instant.now()
+            onTimerStart(context, name)
             isRunning = true
             timerJob = viewModelScope.launch {
                 while (isRunning) {
@@ -95,7 +93,7 @@ class TimerVM(private val repository: ActivityRepository) : ViewModel(){
     }
 
     fun onTimerStart(context: Context, activityName: String) {
-        startNotification(context, activityName)
+        startNotification(context, activityName, start.epochSecond)
     }
 
     fun onTimerStop(context: Context) {

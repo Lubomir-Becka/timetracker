@@ -22,7 +22,8 @@ class NotificationWorker (
     override suspend fun doWork(): Result {
         try {
             val activityName = inputData.getString("activityName") ?: "Activity"
-            val elapsedMinutes = inputData.getLong("elapsedMinutes", 0L)
+            val startTime = inputData.getLong("startTime", 0L)
+            val elapsedMinutes = ((System.currentTimeMillis() / 1000) - startTime) / 60
 
             val channelId = "timetracker_channel"
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -50,11 +51,14 @@ class NotificationWorker (
         return Result.success()
     }
 }
-fun startNotification(context: Context, activityName: String) {
+fun startNotification(context: Context, activityName: String, startTime: Long) {
     val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(
         15, TimeUnit.MINUTES
     )
-        .setInputData(workDataOf("activityName" to activityName))
+        .setInputData(workDataOf(
+            "activityName" to activityName,
+            "startTime" to startTime
+        ))
         .build()
 
     WorkManager.getInstance(context).enqueueUniquePeriodicWork(
